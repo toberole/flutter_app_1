@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 
 class Flutter_Native_Call extends StatefulWidget {
   @override
-  _Flutter_Native_CallState createState() => _Flutter_Native_CallState();
+  _Flutter_Native_CallState createState(){
+    return _Flutter_Native_CallState();
+  }
 }
 
 class _Flutter_Native_CallState extends State<Flutter_Native_Call> {
@@ -11,10 +13,32 @@ class _Flutter_Native_CallState extends State<Flutter_Native_Call> {
   MethodChannel methodChannel = MethodChannel(methodChannel_name);
 
   @override
+  void initState() {
+    super.initState();
+    // 注册java call flutter handler
+    methodChannel.setMethodCallHandler((methodCall) async {
+      switch (methodCall.method) {
+        case 'showText':
+          String content = await methodCall.arguments;
+          if (content != null && content.isNotEmpty) {
+            return 'success';
+          } else {
+            throw PlatformException(
+                code: 'error', message: '失败', details: 'content is null');
+          }
+          break;
+        default:
+          throw MissingPluginException();
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       child: MaterialApp(
         title: "Flutter_Native_Call",
+        theme: ThemeData(primaryColor: Colors.green),
         home: Scaffold(
           appBar: AppBar(
             title: Text("Flutter_Native_Call demo"),
@@ -66,6 +90,11 @@ class _Flutter_Native_CallState extends State<Flutter_Native_Call> {
         ),
       ),
     );
+  }
+
+  String java_call_flutter(String s) {
+    print("xxxxx java_call_flutter: $s");
+    return "java_call_flutter result";
   }
 
   /**
