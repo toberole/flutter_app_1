@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 
 class Flutter_Native_Call extends StatefulWidget {
   @override
-  _Flutter_Native_CallState createState(){
+  _Flutter_Native_CallState createState() {
     return _Flutter_Native_CallState();
   }
 }
@@ -16,6 +16,7 @@ class _Flutter_Native_CallState extends State<Flutter_Native_Call> {
   void initState() {
     super.initState();
     // 注册java call flutter handler
+    // java调用flutter的处理器
     methodChannel.setMethodCallHandler((methodCall) async {
       switch (methodCall.method) {
         case 'showText':
